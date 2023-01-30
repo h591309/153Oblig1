@@ -10,5 +10,6 @@
 
     <string name="hello_first_fragment">Welcome to Quiz-App</string>
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
-    <string name="database_fragment_label">Welcome to the database</string>
+    <string name="database_label">The Database</string>
+    <string name="entry_title">Test Entry</string>
 </resources>

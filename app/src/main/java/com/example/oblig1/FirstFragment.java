@@ -33,16 +33,16 @@ public class FirstFragment extends Fragment {
         binding.buttonQuiz.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getContext(), DatabaseActivity.class);
-                startActivity(intent);
+                NavHostFragment.findNavController(FirstFragment.this)
+                        .navigate(R.id.action_FirstFragment_to_SecondFragment);
             }
         });
 
         binding.buttonDatabase.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                NavHostFragment.findNavController(FirstFragment.this)
-                        .navigate(R.id.action_FirstFragment_to_SecondFragment);
+                Intent intent = new Intent(getContext(), DatabaseActivity.class);
+                startActivity(intent);
             }
         });
     }
