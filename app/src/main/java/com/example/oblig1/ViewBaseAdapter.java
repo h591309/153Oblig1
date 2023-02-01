@@ -1,3 +1,8 @@
+/**
+ *
+ * Helper class used for displaying all entries in the database activity.
+ */
+
 package com.example.oblig1;
 
 import android.content.Context;

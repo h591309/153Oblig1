@@ -1,3 +1,8 @@
+/**
+ *
+ * Activity for showing entries in a list
+ */
+
 package com.example.oblig1;
 
 import android.os.Bundle;
@@ -17,6 +22,7 @@ import com.google.android.material.snackbar.Snackbar;
 
 import java.util.zip.Inflater;
 
+
 public class DatabaseActivity extends MainActivity {
 
     private ActivityDatabaseBinding binding;
@@ -32,6 +38,7 @@ public class DatabaseActivity extends MainActivity {
         setContentView(R.layout.activity_database);
         ListView listView;
         listView = (ListView) findViewById(R.id.listview_content);
+
 
         ViewBaseAdapter viewBaseAdapter = new ViewBaseAdapter(getApplicationContext(), db.getEntries());
         listView.setAdapter(viewBaseAdapter);

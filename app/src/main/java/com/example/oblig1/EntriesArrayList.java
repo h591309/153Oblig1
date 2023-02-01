@@ -1,3 +1,9 @@
+/**
+ *
+ *
+ * Used for storing entries in a array list.
+ */
+
 package com.example.oblig1;
 
 import java.util.ArrayList;

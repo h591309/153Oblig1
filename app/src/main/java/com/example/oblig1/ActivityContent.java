@@ -1,3 +1,8 @@
+/**
+ *
+ *
+ */
+
 package com.example.oblig1;
 
 import androidx.appcompat.app.AppCompatActivity;

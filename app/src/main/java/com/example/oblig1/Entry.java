@@ -1,3 +1,8 @@
+/**
+ *
+ * For storing quiz entries
+ */
+
 package com.example.oblig1;
 
 public class Entry {
@@ -5,13 +10,19 @@ public class Entry {
     private int id;
     private int img;
     private String name;
-
+    private String wrongName1;
+    private String wrongName2;
     public Entry() {
         this.img = R.drawable.cat1;
         this.name = "No name specified";
     }
 
     public Entry(String name, int img) {
+        this.img = img;
+        this.name = name;
+    }
+
+    public Entry(String name, String wrongName1, String wrongName2, int img) {
         this.img = img;
         this.name = name;
     }
