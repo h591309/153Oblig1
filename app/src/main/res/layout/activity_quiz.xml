@@ -20,6 +20,20 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.732" />
 
+    <TextView
+        android:id="@+id/textViewTimer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Timer"
+        android:textSize="20sp"
+        android:alpha="0"
+        app:layout_constraintBottom_toTopOf="@+id/quizBtn1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageViewQuiz"
+        app:layout_constraintVertical_bias="0.521" />
+
     <Button
         android:id="@+id/quizBtn1"
         android:layout_width="wrap_content"
@@ -48,7 +62,7 @@
         android:id="@+id/quizBtn2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/wrong_answer"
+        android:text="@string/right_answer"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.501"
@@ -72,7 +86,7 @@
         android:id="@+id/textViewQuestionNumber"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="TextView"
+        android:text="@string/question_number"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
@@ -97,7 +111,8 @@
         android:id="@+id/textViewPointsAdded"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="TextView"
+        android:text="@string/right_answer"
+        android:textColor="@color/correct_green"
         android:gravity="center"
         android:textSize="60sp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -106,5 +121,18 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.397" />
+
+    <TextView
+        android:id="@+id/textViewNumberOfCorrect"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/score"
+        android:textColor="@color/black"
+        app:layout_constraintBottom_toTopOf="@+id/textViewQuestionNumber"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/quizBtn3"
+        app:layout_constraintVertical_bias="0.755" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

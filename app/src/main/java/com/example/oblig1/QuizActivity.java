@@ -29,6 +29,14 @@ public class QuizActivity extends AppCompatActivity implements View.OnClickListe
     private int numberOfQuestions;
 
     private boolean hardMode = false;
+
+    private static final int timerStartsFrom = 30;
+
+    private int numberOfCorrectAnswers = 0;
+
+    private TextView textViewTimer;
+
+    MyTimer timer;
     private EntriesSingleton db = EntriesSingleton.getInstance();
 
     @Override
@@ -39,6 +47,10 @@ public class QuizActivity extends AppCompatActivity implements View.OnClickListe
         numberOfQuestions = 0;
         hardMode = (boolean) getIntent().getBooleanExtra("hard_mode", false);
 
+        textViewTimer = findViewById(R.id.textViewTimer);
+        timer = new MyTimer(this, timerStartsFrom, textViewTimer);
+
+
         wrongOrRightText();
         Log.d("CORRECT BUTTON", "onCreate: " + correctButton);
     }
@@ -46,11 +58,28 @@ public class QuizActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onStart() {
         super.onStart();
+        timer.setTimeLeft(timerStartsFrom);
         quizQuest();
         Log.d("HARMODE", "onStart: " + (hardMode ? "on" : "off"));
     }
 
+    private void startTimer() {
+
+
+
+    }
+
     private void quizQuest() {
+        timer.setTimeLeft(timerStartsFrom);
+        if(hardMode) {
+            if(!timer.isRunning()) {
+                timer.start();
+            }
+        } else {
+            textViewTimer  = findViewById(R.id.textViewTimer);
+            textViewTimer.setAlpha(0);
+        }
+
         correctButton = (int) Math.round((Math.random() * 2) + 1);
         numberOfQuestions++;
         Log.d("CORRECT BUTTON", "onStart: " + correctButton);
@@ -86,25 +115,16 @@ public class QuizActivity extends AppCompatActivity implements View.OnClickListe
                 btn1.setText(question.getName());
                 btn2.setText(wrongName1);
                 btn3.setText(wrongName2);
-                //btn1.setBackgroundColor(getResources().getColor(R.color.correct_green, getTheme()));
-                //btn2.setBackgroundColor(getResources().getColor(R.color.red, getTheme()));
-                //btn3.setBackgroundColor(getResources().getColor(R.color.red, getTheme()));
                 break;
             case 2:
                 btn2.setText(question.getName());
                 btn1.setText(wrongName1);
                 btn3.setText(wrongName2);
-                //btn1.setBackgroundColor(getResources().getColor(R.color.red, getTheme()));
-                //btn2.setBackgroundColor(getResources().getColor(R.color.correct_green, getTheme()));
-                //btn3.setBackgroundColor(getResources().getColor(R.color.red, getTheme()));
                 break;
             case 3:
                 btn3.setText(question.getName());
                 btn2.setText(wrongName1);
                 btn1.setText(wrongName2);
-                // btn1.setBackgroundColor(getResources().getColor(R.color.red, getTheme()));
-                //btn2.setBackgroundColor(getResources().getColor(R.color.red, getTheme()));
-                //btn3.setBackgroundColor(getResources().getColor(R.color.correct_green, getTheme()));
                 break;
         }
         ImageView img = findViewById(R.id.imageViewQuiz);
@@ -126,43 +146,58 @@ public class QuizActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onClick(View v) {
-        boolean positive = false;
+        timer.setTimeLeft(timerStartsFrom);
+        boolean correctAnswer = false;
         int pointsToAdd = 0;
+        boolean timeOut = false;
+        TextView textViewPointsAdded = findViewById(R.id.textViewPointsAdded);
         switch(v.getId()){
             case R.id.quizBtn1:
-                if(correctButton == 1) {
-                    pointsToAdd += 10;
-                }
-
-                else
-                    pointsToAdd -= 5;
+                if(correctButton == 1)
+                    correctAnswer = true;
                 break;
             case R.id.quizBtn2:
                 if(correctButton == 2)
-                    pointsToAdd += 10;
-                else
-                    pointsToAdd -= 5;
+                    correctAnswer = true;
                 break;
             case R.id.quizBtn3:
                 if(correctButton == 3)
-                    pointsToAdd += 10;
-                else
-                    pointsToAdd -= 5;
+                    correctAnswer = true;
                 break;
         }
-        score += pointsToAdd;
-        TextView textViewPointsAdded = findViewById(R.id.textViewPointsAdded);
-        if(pointsToAdd > 0) {
-            textViewPointsAdded.setTextColor(getResources().getColor(R.color.correct_green, getTheme()));
-            textViewPointsAdded.setText(R.string.right_answer);
-        } else {
+
+        if(timer.getTimeLeft() < 0) {
+            correctAnswer = false;
+            timeOut = true;
             textViewPointsAdded.setTextColor(getResources().getColor(R.color.red, getTheme()));
-            textViewPointsAdded.setText(R.string.wrong_answer);
+            textViewPointsAdded.setText(R.string.tooSlow);
         }
+        if(correctAnswer) {
+            pointsToAdd = 10;
+            numberOfCorrectAnswers++;
+        } else {
+            pointsToAdd = -5;
+        }
+
+        if(!timeOut) {
+            if(pointsToAdd > 0) {
+                textViewPointsAdded.setTextColor(getResources().getColor(R.color.correct_green, getTheme()));
+                textViewPointsAdded.setText(R.string.right_answer);
+            } else {
+                textViewPointsAdded.setTextColor(getResources().getColor(R.color.red, getTheme()));
+                textViewPointsAdded.setText(R.string.wrong_answer);
+            }
+        }
+
+        score += pointsToAdd;
+
         textViewAnimation();
 
         TextView text = (TextView) findViewById(R.id.textViewQuiz);
-        text.setText("Score: " + score);
+        text.setText("Points: " + score);
+        TextView numOfCorrectTextView = findViewById(R.id.textViewNumberOfCorrect);
+        numOfCorrectTextView.setTextColor(getResources().getColor(R.color.black, getTheme()));
+        numOfCorrectTextView.setText(getResources().getString(R.string.score) + " " + numberOfCorrectAnswers + " / " + (numberOfQuestions));
 
         quizQuest();
 

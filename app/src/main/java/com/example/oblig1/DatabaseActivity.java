@@ -53,6 +53,8 @@ public class DatabaseActivity extends MainActivity implements View.OnClickListen
    @Override
    protected void onStart() {
        super.onStart();
+       Button sortButton = findViewById(R.id.sortButton);
+       sortButton.setText(db.getEntries().getSortedAZ() ? "Sorted A-Z" : "Sorted Z-A");
        viewBaseAdapter.notifyDataSetChanged();
    }
 
@@ -67,13 +69,14 @@ public class DatabaseActivity extends MainActivity implements View.OnClickListen
                 Log.d("BUTTON PRESSED", "Sort: AZ og ZA");
                 Button btn = findViewById(R.id.sortButton);
                 EntriesArrayList entries = db.getEntries();
-                if(!entries.getSortedAZ()) {
-                    entries.sortAZ();
-                    btn.setText("Sorted A-Z");
-                } else {
+
+                if (entries.getSortedAZ()) {
                     entries.sortZA();
-                    btn.setText("Sorted Z-A");
+                } else {
+                    entries.sortAZ();
                 }
+
+                btn.setText(entries.getSortedAZ() ? "Sorted A-Z" : "Sorted Z-A");
                 viewBaseAdapter.notifyDataSetChanged();
                 break;
         }

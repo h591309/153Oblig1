@@ -54,7 +54,7 @@ public class EntriesArrayList {
         entries.sort(new Comparator<Entry>() {
             @Override
             public int compare(Entry o1, Entry o2) {
-                return o1.getName().compareTo(o2.getName());
+                return o1.getName().toLowerCase().compareTo(o2.getName().toLowerCase());
             }
         });
     }
@@ -68,7 +68,7 @@ public class EntriesArrayList {
         entries.sort(new Comparator<Entry>() {
             @Override
             public int compare(Entry o1, Entry o2) {
-                return o2.getName().compareTo(o1.getName());
+                return o2.getName().toLowerCase().compareTo(o1.getName().toLowerCase());
             }
         });
     }

@@ -22,4 +22,6 @@
     <string name="helper_text_new_entry">Click image below to pick an image from your gallery</string>
     <string name="header_new_entry">New Quiz Question</string>
     <string name="add_new_entry_button_text">Submit</string>
+    <string name="tooSlow">You were too slow</string>
+    <string name="score">Number of correct answers:</string>
 </resources>
