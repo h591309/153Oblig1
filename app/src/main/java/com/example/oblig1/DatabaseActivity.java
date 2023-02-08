@@ -5,52 +5,60 @@
 
 package com.example.oblig1;
 
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ListView;
 
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
-import androidx.navigation.ui.NavigationUI;
 
 import com.example.oblig1.databinding.ActivityDatabaseBinding;
-import com.google.android.material.snackbar.Snackbar;
-
-import java.util.zip.Inflater;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 
-public class DatabaseActivity extends MainActivity {
+public class DatabaseActivity extends MainActivity implements View.OnClickListener {
 
     private ActivityDatabaseBinding binding;
     private AppBarConfiguration appBarConfiguration;
 
-    private final EntryDatabase db = new EntryDatabase();
-
+    private EntriesSingleton db = EntriesSingleton.getInstance();
+    private ViewBaseAdapter viewBaseAdapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        db.addExampleData();
+
         binding = ActivityDatabaseBinding.inflate(getLayoutInflater());
         setContentView(R.layout.activity_database);
         ListView listView;
         listView = (ListView) findViewById(R.id.listview_content);
 
 
-        ViewBaseAdapter viewBaseAdapter = new ViewBaseAdapter(getApplicationContext(), db.getEntries());
+        viewBaseAdapter = new ViewBaseAdapter(this, db);
         listView.setAdapter(viewBaseAdapter);
-        setSupportActionBar(binding.toolbar);
 
-        binding.databaseFab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Log.d("Database", "onClick: Add entry");
-            }
-        });
+        FloatingActionButton fab = findViewById(R.id.databaseFab);
+        fab.setOnClickListener(this);
 
+        //setSupportActionBar(binding.toolbar);
+    }
 
+   @Override
+   protected void onStart() {
+       super.onStart();
+       viewBaseAdapter.notifyDataSetChanged();
+   }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.databaseFab:
+                Intent intent = new Intent(binding.getRoot().getContext(), AddNewEntryActivity.class);
+                startActivity(intent);
+                break;
+        }
     }
 }

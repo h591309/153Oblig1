@@ -4,9 +4,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".DatabaseActivity">
+    tools:context=".DatabaseActivity"
+    android:id="@+id/coordinator_layout">
 
-    <com.google.android.material.appbar.AppBarLayout
+
+    <!--com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appBarLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -20,14 +22,19 @@
             android:background="?attr/colorPrimary"
             app:popupTheme="@style/Theme.Oblig1.PopupOverlay" />
 
-    </com.google.android.material.appbar.AppBarLayout>
+    </com.google.android.material.appbar.AppBarLayout-->
 
     <ListView
         android:id="@+id/listview_content"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-
     </ListView>
+
+    <FrameLayout
+        android:id="@+id/add_entry_placeholder"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+    </FrameLayout>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/databaseFab"

@@ -5,10 +5,11 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Switch;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.widget.SwitchCompat;
 import androidx.fragment.app.Fragment;
-import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.oblig1.databinding.FragmentFirstBinding;
 
@@ -29,12 +30,19 @@ public class FirstFragment extends Fragment {
 
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
+        SwitchCompat aSwitch = (SwitchCompat) getView().findViewById(R.id.hard_mode_switch);
         binding.buttonQuiz.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                NavHostFragment.findNavController(FirstFragment.this)
-                        .navigate(R.id.action_FirstFragment_to_SecondFragment);
+                boolean hardMode = false;
+                if(aSwitch != null) {
+                    hardMode = aSwitch.isChecked();
+                }
+
+
+                Intent intent = new Intent(getContext(), QuizActivity.class);
+                intent.putExtra("hard_mode", hardMode);
+                startActivity(intent);
             }
         });
 

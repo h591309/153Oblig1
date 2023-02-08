@@ -1,6 +1,7 @@
 package com.example.oblig1;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,6 +23,7 @@ public class SecondFragment extends Fragment {
     ) {
 
         binding = FragmentSecondBinding.inflate(inflater, container, false);
+        Log.d("DBTest", "onCreateView: ");
         return binding.getRoot();
 
     }

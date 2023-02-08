@@ -5,24 +5,21 @@
 
 package com.example.oblig1;
 
+import android.graphics.Bitmap;
+
 public class Entry {
 
     private int id;
-    private int img;
+    private Bitmap img;
     private String name;
     private String wrongName1;
     private String wrongName2;
     public Entry() {
-        this.img = R.drawable.cat1;
+
         this.name = "No name specified";
     }
 
-    public Entry(String name, int img) {
-        this.img = img;
-        this.name = name;
-    }
-
-    public Entry(String name, String wrongName1, String wrongName2, int img) {
+    public Entry(String name, Bitmap img) {
         this.img = img;
         this.name = name;
     }
@@ -35,11 +32,11 @@ public class Entry {
         this.id = id;
     }
 
-    public int getImg() {
+    public Bitmap getImg() {
         return img;
     }
 
-    public void setImg(int img) {
+    public void setImg(Bitmap img) {
         this.img = img;
     }
 

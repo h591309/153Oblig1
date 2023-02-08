@@ -12,4 +12,14 @@
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
     <string name="database_label">The Database</string>
     <string name="entry_title">Test Entry</string>
+    <string name="add_name_txt">Right answer</string>
+    <string name="wrong_answer">Wrong answer</string>
+    <string name="right_answer">Right answer</string>
+    <string name="question_number">Question </string>
+    <string name="hard_mode">Hard mode</string>
+    <string name="mode_text">Easy mode</string>
+    <string name="remove">Remove</string>
+    <string name="helper_text_new_entry">Click image below to pick an image from your gallery</string>
+    <string name="header_new_entry">New Quiz Question</string>
+    <string name="add_new_entry_button_text">Submit</string>
 </resources>

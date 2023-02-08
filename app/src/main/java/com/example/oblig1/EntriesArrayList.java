@@ -11,12 +11,23 @@ import java.util.List;
 
 public class EntriesArrayList {
 
-    private List<Entry> entries = null;
-    private int lastIndex;
+    private static List<Entry> entries = null;
+    private static int lastIndex;
 
     public EntriesArrayList() {
         this.entries = new ArrayList<>();
         lastIndex = 0;
+    }
+
+    public boolean isEmpty() {
+        if(lastIndex == 0)
+            return true;
+
+        return false;
+    }
+
+    public EntriesArrayList getEntries() {
+        return new EntriesArrayList(entries);
     }
 
     public EntriesArrayList(List<Entry> entries) {
@@ -30,11 +41,7 @@ public class EntriesArrayList {
     }
 
     public void removeEntry(int id) {
-        for(int i = 0; i < entries.size(); i++) {
-            if(entries.get(i).getId() == id) {
-                entries.remove(id);
-            }
-        }
+        entries.remove(id);
         lastIndex--;
     }
 
