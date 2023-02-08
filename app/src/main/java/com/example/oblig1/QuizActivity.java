@@ -84,27 +84,27 @@ public class QuizActivity extends AppCompatActivity implements View.OnClickListe
         switch (correctButton) {
             case 1:
                 btn1.setText(question.getName());
-                btn1.setBackgroundColor(getResources().getColor(R.color.correct_green, getTheme()));
                 btn2.setText(wrongName1);
-                btn2.setBackgroundColor(getResources().getColor(R.color.red, getTheme()));
                 btn3.setText(wrongName2);
-                btn3.setBackgroundColor(getResources().getColor(R.color.red, getTheme()));
+                //btn1.setBackgroundColor(getResources().getColor(R.color.correct_green, getTheme()));
+                //btn2.setBackgroundColor(getResources().getColor(R.color.red, getTheme()));
+                //btn3.setBackgroundColor(getResources().getColor(R.color.red, getTheme()));
                 break;
             case 2:
                 btn2.setText(question.getName());
-                btn2.setBackgroundColor(getResources().getColor(R.color.correct_green, getTheme()));
                 btn1.setText(wrongName1);
-                btn1.setBackgroundColor(getResources().getColor(R.color.red, getTheme()));
                 btn3.setText(wrongName2);
-                btn3.setBackgroundColor(getResources().getColor(R.color.red, getTheme()));
+                //btn1.setBackgroundColor(getResources().getColor(R.color.red, getTheme()));
+                //btn2.setBackgroundColor(getResources().getColor(R.color.correct_green, getTheme()));
+                //btn3.setBackgroundColor(getResources().getColor(R.color.red, getTheme()));
                 break;
             case 3:
                 btn3.setText(question.getName());
-                btn3.setBackgroundColor(getResources().getColor(R.color.correct_green, getTheme()));
                 btn2.setText(wrongName1);
-                btn2.setBackgroundColor(getResources().getColor(R.color.red, getTheme()));
                 btn1.setText(wrongName2);
-                btn1.setBackgroundColor(getResources().getColor(R.color.red, getTheme()));
+                // btn1.setBackgroundColor(getResources().getColor(R.color.red, getTheme()));
+                //btn2.setBackgroundColor(getResources().getColor(R.color.red, getTheme()));
+                //btn3.setBackgroundColor(getResources().getColor(R.color.correct_green, getTheme()));
                 break;
         }
         ImageView img = findViewById(R.id.imageViewQuiz);

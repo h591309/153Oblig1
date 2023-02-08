@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ListView;
 
 import androidx.navigation.ui.AppBarConfiguration;
@@ -30,7 +31,7 @@ public class DatabaseActivity extends MainActivity implements View.OnClickListen
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        db.getEntries().sortAZ();
         binding = ActivityDatabaseBinding.inflate(getLayoutInflater());
         setContentView(R.layout.activity_database);
         ListView listView;
@@ -42,6 +43,9 @@ public class DatabaseActivity extends MainActivity implements View.OnClickListen
 
         FloatingActionButton fab = findViewById(R.id.databaseFab);
         fab.setOnClickListener(this);
+        Button btnSort = findViewById(R.id.sortButton);
+        btnSort.setOnClickListener(this);
+
 
         //setSupportActionBar(binding.toolbar);
     }
@@ -58,6 +62,19 @@ public class DatabaseActivity extends MainActivity implements View.OnClickListen
             case R.id.databaseFab:
                 Intent intent = new Intent(binding.getRoot().getContext(), AddNewEntryActivity.class);
                 startActivity(intent);
+                break;
+            case R.id.sortButton:
+                Log.d("BUTTON PRESSED", "Sort: AZ og ZA");
+                Button btn = findViewById(R.id.sortButton);
+                EntriesArrayList entries = db.getEntries();
+                if(!entries.getSortedAZ()) {
+                    entries.sortAZ();
+                    btn.setText("Sorted A-Z");
+                } else {
+                    entries.sortZA();
+                    btn.setText("Sorted Z-A");
+                }
+                viewBaseAdapter.notifyDataSetChanged();
                 break;
         }
     }

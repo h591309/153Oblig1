@@ -26,8 +26,9 @@
 
     <ListView
         android:id="@+id/listview_content"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        >
     </ListView>
 
     <FrameLayout
@@ -45,6 +46,16 @@
         android:layout_marginBottom="16dp"
         app:maxImageSize="40dp"
         app:srcCompat="@drawable/plus" />
+
+    <Button
+        android:id="@+id/sortButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Sort"
+        android:layout_gravity="bottom|start"
+        android:layout_marginStart="16dp"
+        android:layout_marginBottom="16dp"
+        />
 
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
