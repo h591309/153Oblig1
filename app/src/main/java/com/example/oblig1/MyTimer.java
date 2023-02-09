@@ -5,6 +5,13 @@ import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.widget.TextView;
 
+/**
+ *
+ * A custom timer that extends thread.
+ * When run it will count down in seconds until time left reaches 0.
+ * @apiNote Will update view of TextView given.
+ *
+ */
 public class MyTimer extends Thread{
 
 
@@ -16,14 +23,18 @@ public class MyTimer extends Thread{
     private boolean running = false;
 
 
+    /**
+     * Creates a new MyTimer-object
+     * @param ctx
+     * @param seconds
+     * @param textView
+     */
     public MyTimer(Context ctx, int seconds, TextView textView) {
         timerStartsFrom = seconds;
         timerTextView = textView;
         this.colorLowOnTime = ctx.getResources().getColor(R.color.red, ctx.getTheme());
         this.colorBlack = ctx.getResources().getColor(R.color.black, ctx.getTheme());
     }
-
-
 
     @Override
     public void run() {
@@ -59,14 +70,26 @@ public class MyTimer extends Thread{
         }
     }
 
+    /**
+     * Check to see if thread is actively running.
+     * @return True if thread is currently running.
+     */
     public boolean isRunning() {
         return running;
     }
 
+    /**
+     * Sets how many seconds the timer should count down from.
+     * @param timeLeft
+     */
     public void setTimeLeft(int timeLeft) {
         this.timeLeft = timeLeft;
     }
 
+    /**
+     * Gets the time (in seconds) of how much time is left until timer hits 0.
+     * @return Time left (in seconds)
+     */
     public int getTimeLeft() {
         return timeLeft;
     }

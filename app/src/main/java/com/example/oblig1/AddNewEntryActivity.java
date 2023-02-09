@@ -41,8 +41,8 @@ public class AddNewEntryActivity extends AppCompatActivity implements View.OnCli
     }
 
     /**
-     *
-     * @return Entry from user input.
+     * Creates an Entry from the user input. (Image and name)
+     * @return Entry
      */
     public Entry createEntryFromInput() {
         EditText editText = (EditText) findViewById(R.id.inputNameNewEntry);
@@ -67,7 +67,7 @@ public class AddNewEntryActivity extends AppCompatActivity implements View.OnCli
 
     /**
      *
-     * Listening for result returning from an activity started with startActuvityForResult().
+     * Listening for result returning from an activity started with startActivityForResult().
      *
      * @param requestCode The integer request code originally supplied to
      *                    startActivityForResult(), allowing you to identify who this
@@ -89,7 +89,7 @@ public class AddNewEntryActivity extends AppCompatActivity implements View.OnCli
     }
 
     /**
-     * Adds a new entry to the applications datastructure.
+     * Adds a new entry to the application data-structure.
      */
     public void addNewEntryToDatabase() {
         Entry entry = createEntryFromInput();
@@ -105,7 +105,6 @@ public class AddNewEntryActivity extends AppCompatActivity implements View.OnCli
                 break;
             case R.id.submitButton:
                 addNewEntryToDatabase();
-                //Intent intent = new Intent(getBaseContext(), DatabaseActivity.class);
                 Intent intent = new Intent(getBaseContext(), MainActivity.class);
                 startActivity(intent);
                 break;

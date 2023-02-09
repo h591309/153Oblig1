@@ -7,6 +7,10 @@ package com.example.oblig1;
 
 import android.graphics.Bitmap;
 
+/**
+ *
+ * Entry object class.
+ */
 public class Entry {
 
     private int id;
@@ -19,15 +23,29 @@ public class Entry {
         this.name = "No name specified";
     }
 
+    /**
+     *
+     * Creates an Entry-object.
+     * @param name
+     * @param img
+     */
     public Entry(String name, Bitmap img) {
         this.img = img;
         this.name = name;
     }
 
+    /**
+     * Returns the id for Entry
+     * @return id.
+     */
     public int getId() {
         return id;
     }
 
+    /**
+     * Sets id for Entry.
+     * @param id
+     */
     public void setId(int id) {
         this.id = id;
     }

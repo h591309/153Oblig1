@@ -4,6 +4,10 @@ package com.example.oblig1;
 import android.graphics.BitmapFactory;
 import android.util.Log;
 
+/**
+ *
+ * Singleton for access to the EntriesArrayList throughout the application
+ */
 public class EntriesSingleton {
 
     private static volatile EntriesSingleton INSTANCE = null;

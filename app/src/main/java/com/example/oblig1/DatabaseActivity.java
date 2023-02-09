@@ -21,6 +21,10 @@ import com.example.oblig1.databinding.ActivityDatabaseBinding;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 
+/**
+ *
+ * Activity for displaying list of quiz-questions (entries).
+ */
 public class DatabaseActivity extends MainActivity implements View.OnClickListener {
 
     private ActivityDatabaseBinding binding;

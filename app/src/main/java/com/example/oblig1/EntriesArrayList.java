@@ -13,12 +13,20 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+/**
+ *
+ * Class for creating an array-list that can contain Entry objects.
+ */
 public class EntriesArrayList {
 
     private static List<Entry> entries = null;
     private static int lastIndex;
     private boolean isSortedAZ = false;
 
+    /**
+     * Creates empty EntriesArrayList
+     *
+     */
     public EntriesArrayList() {
         this.entries = new ArrayList<>();
         lastIndex = 0;

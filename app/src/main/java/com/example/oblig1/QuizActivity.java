@@ -3,6 +3,7 @@ package com.example.oblig1;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -20,23 +21,23 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
 
+
+/**
+ *
+ * Activity for the quiz.
+ */
 public class QuizActivity extends AppCompatActivity implements View.OnClickListener {
 
     private ActivityQuizBinding binding;
     private int score = 0;
     private int correctButton;
-
     private int numberOfQuestions;
-
     private boolean hardMode = false;
-
     private static final int timerStartsFrom = 5;
-
     private int numberOfCorrectAnswers = 0;
-
     private TextView textViewTimer;
 
-    MyTimer timer;
+    private MyTimer timer;
     private EntriesSingleton db = EntriesSingleton.getInstance();
 
     @Override
@@ -69,24 +70,49 @@ public class QuizActivity extends AppCompatActivity implements View.OnClickListe
 
     }
 
+    /**
+     * Displays a quiz-squestion.
+     *
+     * Shows one image and picks one button to have the correct name.
+     * Picks two other random names from the other entries to display on the two other buttons.
+     * Also binds onClickListener() to these buttons.
+     */
     private void quizQuest() {
         timer.setTimeLeft(timerStartsFrom);
+        numberOfQuestions++;
+
+        //Check to see if hardmode is enabled.
         if(hardMode) {
+            //Starts timer-thread as long as its not running already.
             if(!timer.isRunning()) {
                 timer.start();
             }
+            TextView modeTxt = (TextView) findViewById(R.id.textViewMode);
+            modeTxt.setText("Hard mode");
         } else {
+            //Sets timer text to be invisible.
             textViewTimer  = findViewById(R.id.textViewTimer);
             textViewTimer.setAlpha(0);
         }
 
+        //Picks one of the buttons to be the correct one.
         correctButton = (int) Math.round((Math.random() * 2) + 1);
-        numberOfQuestions++;
-        Log.d("CORRECT BUTTON", "onStart: " + correctButton);
+
         Entry question = pickRandomQuizQuestion();
+
+        //Picks to random wrong answers.
         String wrongName1 = pickRandomQuizQuestion().getName();
         String wrongName2 = pickRandomQuizQuestion().getName();
+
         boolean done = false;
+
+
+        //Creates entries if there isnt enough entries in the database for a quiz question.
+        if(db.getEntries().size() < 3) {
+            createBackupEntries();
+        }
+
+        //Makes sure the two given wrong answers are not equal to each other or the correct answer.
         while(!done) {
             if(wrongName1 == question.getName()) {
                 wrongName1 = pickRandomQuizQuestion().getName();
@@ -105,11 +131,8 @@ public class QuizActivity extends AppCompatActivity implements View.OnClickListe
         Button btn1 = findViewById(R.id.quizBtn1);
         Button btn2 = findViewById(R.id.quizBtn2);
         Button btn3 = findViewById(R.id.quizBtn3);
-        if(hardMode) {
-            TextView modeTxt = (TextView) findViewById(R.id.textViewMode);
-            modeTxt.setText("Hard mode");
-        }
 
+        //Sets correct text for the buttons
         switch (correctButton) {
             case 1:
                 btn1.setText(question.getName());
@@ -127,6 +150,8 @@ public class QuizActivity extends AppCompatActivity implements View.OnClickListe
                 btn1.setText(wrongName2);
                 break;
         }
+
+        //Sets the correct image for quiz-question
         ImageView img = findViewById(R.id.imageViewQuiz);
         img.setImageBitmap(question.getImg());
 
@@ -134,10 +159,15 @@ public class QuizActivity extends AppCompatActivity implements View.OnClickListe
         btn2.setOnClickListener(this);
         btn3.setOnClickListener(this);
 
+        //Sets the score text
         TextView text = (TextView) findViewById(R.id.textViewQuiz);
         text.setText("Score: " + score);
     }
 
+    /**
+     * Picks a random quiz-question.
+     * @return Entry
+     */
     private Entry pickRandomQuizQuestion() {
         int randomNumber = (int) Math.round(Math.random() * (db.getEntries().size()-1));
         EntriesSingleton db = EntriesSingleton.getInstance();
@@ -150,6 +180,8 @@ public class QuizActivity extends AppCompatActivity implements View.OnClickListe
         int pointsToAdd = 0;
         boolean timeOut = false;
         TextView textViewPointsAdded = findViewById(R.id.textViewPointsAdded);
+
+        //Checks for what button is pressed.
         switch(v.getId()){
             case R.id.quizBtn1:
                 if(correctButton == 1)
@@ -165,10 +197,13 @@ public class QuizActivity extends AppCompatActivity implements View.OnClickListe
                 break;
         }
 
+        //Check to see if there is time left on hardmode
         if(timer.getTimeLeft() < 0) {
             correctAnswer = false;
             timeOut = true;
         }
+
+        //Check to see if correct answer was picked.
         if(correctAnswer) {
             pointsToAdd = 10;
             numberOfCorrectAnswers++;
@@ -176,7 +211,9 @@ public class QuizActivity extends AppCompatActivity implements View.OnClickListe
             pointsToAdd = -5;
         }
 
+        //Checks if time ran out
         if(!timeOut) {
+            //Updates display for wrong or right answer.
             if(pointsToAdd > 0) {
                 textViewPointsAdded.setTextColor(getResources().getColor(R.color.correct_green, getTheme()));
                 textViewPointsAdded.setText(R.string.right_answer);
@@ -189,9 +226,11 @@ public class QuizActivity extends AppCompatActivity implements View.OnClickListe
             textViewPointsAdded.setText(R.string.tooSlow);
         }
 
+        //Adds correct amount of points to the score.
         score += pointsToAdd;
 
         textViewAnimation();
+
 
         TextView text = (TextView) findViewById(R.id.textViewQuiz);
         text.setText("Points: " + score);
@@ -199,10 +238,37 @@ public class QuizActivity extends AppCompatActivity implements View.OnClickListe
         numOfCorrectTextView.setTextColor(getResources().getColor(R.color.black, getTheme()));
         numOfCorrectTextView.setText(getResources().getString(R.string.score) + " " + numberOfCorrectAnswers + " / " + (numberOfQuestions));
 
+        //Shows a new quiz question.
         quizQuest();
 
     }
 
+    /**
+     * Creates bitmap from drawable.
+     * @param drawableId
+     * @return Bitmap
+     */
+    private Bitmap createBitmapFromDrawable(int drawableId) {
+        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), drawableId);
+        return bitmap;
+    }
+
+    /**
+     * Creates 3 Entries for the database.
+     * 3 is minimum amount of entries for this quiz.
+     */
+    private void createBackupEntries() {
+        Entry e = new Entry("Kitten with blue eyes", createBitmapFromDrawable(R.drawable.cat1));
+        db.addExampleData(e);
+        e = new Entry("Black cat with yellow eyes", createBitmapFromDrawable(R.drawable.cat2));
+        db.addExampleData(e);
+        e = new Entry("Not a cat", createBitmapFromDrawable(R.drawable.cat3));
+        db.addExampleData(e);
+    }
+
+    /**
+     * Animation for textview showing wrong/right answer.
+     */
     private void textViewAnimation() {
         AlphaAnimation fadeIn = new AlphaAnimation(0.0f , 1.0f ) ;
         AlphaAnimation fadeOut = new AlphaAnimation( 1.0f , 0.0f ) ;
@@ -217,6 +283,11 @@ public class QuizActivity extends AppCompatActivity implements View.OnClickListe
         fadeOut.setStartOffset(1000+fadeIn.getStartOffset());
     }
 
+    /**
+     *
+     * Animation to initially hide the textview showing wrong/right answer.
+     *
+     */
     private void wrongOrRightText() {
         AlphaAnimation fadeOut = new AlphaAnimation( 1.0f , 0.0f ) ;
 

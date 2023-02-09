@@ -20,6 +20,10 @@ import android.widget.Button;
 
 import com.example.oblig1.databinding.ActivityMainBinding;
 
+/**
+ *
+ * Main activity for the application. This is the first Activity to be run when application starts.
+ */
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     private AppBarConfiguration appBarConfiguration;
@@ -29,6 +33,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        /*
+            Adds example-data
+            TODO: To be removed when no longer needed.
+         */
         if(!db.exampleDataExist()) {
             Entry e = new Entry("Kitten with blue eyes", createBitmapFromDrawable(R.drawable.cat1));
             db.addExampleData(e);
@@ -52,6 +60,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         btnQuiz.setOnClickListener(this);
     }
 
+    /**
+     * Creates bitmap from given drawable.
+     * @param drawableId
+     * @return Bitmap
+     */
     private Bitmap createBitmapFromDrawable(int drawableId) {
         Bitmap bitmap = BitmapFactory.decodeResource(getResources(), drawableId);
         return bitmap;

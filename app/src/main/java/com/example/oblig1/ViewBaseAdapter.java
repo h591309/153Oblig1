@@ -21,12 +21,23 @@ import androidx.fragment.app.FragmentManager;
 
 import java.util.List;
 
+/**
+ *
+ * Base adapter to display databasec content as a list inside an activity.
+ *
+ */
+
 public class ViewBaseAdapter extends BaseAdapter implements View.OnClickListener {
 
     private final Context ctx;
     private EntriesSingleton entries;
     private LayoutInflater inflater;
 
+    /**
+     * Creates a new ViewBaseAdapter
+     * @param ctx
+     * @param db
+     */
     public ViewBaseAdapter(Context ctx, EntriesSingleton db) {
         this.ctx = ctx;
         this.entries = db;
@@ -56,12 +67,14 @@ public class ViewBaseAdapter extends BaseAdapter implements View.OnClickListener
         ImageView img = (ImageView) convertView.findViewById(R.id.imageView);
         Button btn = (Button) convertView.findViewById(R.id.btnRemove);
         btn.setOnClickListener(this);
+        //Sets a tag on the button to be used in the onClickListener to remove the correct entry.
         btn.setTag((int)position);
 
+        //Updates correct text and image for the entry.
         textView.setText(entries.getEntries().getEntry(position).getName());
         Bitmap bitmap = entries.getEntries().getEntry(position).getImg();
         img.setImageBitmap(bitmap);
-        Log.d("BaseAdapter", "getView: " + entries.getEntries().getEntry(position).getName());
+
         return convertView;
     }
 
@@ -69,6 +82,8 @@ public class ViewBaseAdapter extends BaseAdapter implements View.OnClickListener
     public void onClick(View v) {
         EntriesSingleton db = EntriesSingleton.getInstance();
         int id = (int) v.getTag();
+
+        //Removes correct entry if remove-button is pressed.
         if(db.doesEntryExist(id)) {
             db.removeEntry(id);
             this.entries = db;
