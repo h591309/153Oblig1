@@ -16,6 +16,10 @@ import com.example.oblig1.databinding.ActivityAddNewEntryBinding;
 import com.example.oblig1.databinding.ActivityMainBinding;
 
 
+/**
+ *
+ * Activity for adding new entries to the database.
+ */
 public class AddNewEntryActivity extends AppCompatActivity implements View.OnClickListener {
 
 
@@ -36,6 +40,10 @@ public class AddNewEntryActivity extends AppCompatActivity implements View.OnCli
         btn.setOnClickListener(this);
     }
 
+    /**
+     *
+     * @return Entry from user input.
+     */
     public Entry createEntryFromInput() {
         EditText editText = (EditText) findViewById(R.id.inputNameNewEntry);
         String txt = editText.getText().toString();
@@ -46,15 +54,30 @@ public class AddNewEntryActivity extends AppCompatActivity implements View.OnCli
         return e;
     }
 
+    /**
+     * Method to be called when user wants to select an image from their gallery
+     */
     private void imageChooser() {
-
-
         Intent intent = new Intent();
         intent.setType("image/*");
         intent.setAction(Intent.ACTION_GET_CONTENT);
+        //TODO find a more relevant method as its depricated (Media storage?)
         startActivityForResult(intent, PICK_IMAGE);
     }
 
+    /**
+     *
+     * Listening for result returning from an activity started with startActuvityForResult().
+     *
+     * @param requestCode The integer request code originally supplied to
+     *                    startActivityForResult(), allowing you to identify who this
+     *                    result came from.
+     * @param resultCode The integer result code returned by the child activity
+     *                   through its setResult().
+     * @param data An Intent, which can return result data to the caller
+     *               (various data can be attached to Intent "extras").
+     *
+     */
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -65,6 +88,9 @@ public class AddNewEntryActivity extends AppCompatActivity implements View.OnCli
         }
     }
 
+    /**
+     * Adds a new entry to the applications datastructure.
+     */
     public void addNewEntryToDatabase() {
         Entry entry = createEntryFromInput();
         Log.d("SUBMITTED", "onClick: " + entry.toString());

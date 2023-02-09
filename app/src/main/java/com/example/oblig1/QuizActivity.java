@@ -30,7 +30,7 @@ public class QuizActivity extends AppCompatActivity implements View.OnClickListe
 
     private boolean hardMode = false;
 
-    private static final int timerStartsFrom = 30;
+    private static final int timerStartsFrom = 5;
 
     private int numberOfCorrectAnswers = 0;
 
@@ -146,7 +146,6 @@ public class QuizActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onClick(View v) {
-        timer.setTimeLeft(timerStartsFrom);
         boolean correctAnswer = false;
         int pointsToAdd = 0;
         boolean timeOut = false;
@@ -169,8 +168,6 @@ public class QuizActivity extends AppCompatActivity implements View.OnClickListe
         if(timer.getTimeLeft() < 0) {
             correctAnswer = false;
             timeOut = true;
-            textViewPointsAdded.setTextColor(getResources().getColor(R.color.red, getTheme()));
-            textViewPointsAdded.setText(R.string.tooSlow);
         }
         if(correctAnswer) {
             pointsToAdd = 10;
@@ -187,6 +184,9 @@ public class QuizActivity extends AppCompatActivity implements View.OnClickListe
                 textViewPointsAdded.setTextColor(getResources().getColor(R.color.red, getTheme()));
                 textViewPointsAdded.setText(R.string.wrong_answer);
             }
+        } else {
+            textViewPointsAdded.setTextColor(getResources().getColor(R.color.red, getTheme()));
+            textViewPointsAdded.setText(R.string.tooSlow);
         }
 
         score += pointsToAdd;

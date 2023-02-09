@@ -1,11 +1,13 @@
 package com.example.oblig1;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import androidx.appcompat.widget.SwitchCompat;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -13,14 +15,17 @@ import androidx.navigation.ui.NavigationUI;
 
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 
 import com.example.oblig1.databinding.ActivityMainBinding;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     private AppBarConfiguration appBarConfiguration;
     private ActivityMainBinding binding;
     private EntriesSingleton db = EntriesSingleton.getInstance();
+    SwitchCompat aSwitch;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,42 +42,14 @@ public class MainActivity extends AppCompatActivity {
             db.addExampleData(e);
             db.setExampleDataExist();
         }
-        binding = ActivityMainBinding.inflate(getLayoutInflater());
-        setContentView(binding.getRoot());
-        setSupportActionBar(binding.toolbar);
+        setContentView(R.layout.activity_main);
 
-        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
-        appBarConfiguration = new AppBarConfiguration.Builder(navController.getGraph()).build();
-        NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
-    }
+        aSwitch = (SwitchCompat) findViewById(R.id.hard_mode_switch);
+        Button btnDB = findViewById(R.id.button_database);
+        Button btnQuiz = findViewById(R.id.button_quiz);
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public boolean onSupportNavigateUp() {
-        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
-        return NavigationUI.navigateUp(navController, appBarConfiguration)
-                || super.onSupportNavigateUp();
+        btnDB.setOnClickListener(this);
+        btnQuiz.setOnClickListener(this);
     }
 
     private Bitmap createBitmapFromDrawable(int drawableId) {
@@ -80,4 +57,25 @@ public class MainActivity extends AppCompatActivity {
         return bitmap;
     }
 
+    @Override
+    public void onClick(View v) {
+        switch(v.getId()) {
+            case R.id.button_database:
+                Intent databaseIntent = new Intent(this, DatabaseActivity.class);
+                startActivity(databaseIntent);
+                break;
+            case R.id.button_quiz:
+
+                boolean hardMode = false;
+                if(aSwitch != null) {
+                    hardMode = aSwitch.isChecked();
+                }
+
+
+                Intent quizIntent = new Intent(this, QuizActivity.class);
+                quizIntent.putExtra("hard_mode", hardMode);
+                startActivity(quizIntent);
+                break;
+        }
+    }
 }
