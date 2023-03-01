@@ -5,21 +5,27 @@
 
 package com.example.oblig1;
 
-import android.graphics.Bitmap;
+import androidx.annotation.NonNull;
+import androidx.room.ColumnInfo;
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
 
 /**
  *
  * Entry object class.
  */
+@Entity
 public class Entry {
 
+    @PrimaryKey(autoGenerate = true)
+    @NonNull
     private int id;
-    private Bitmap img;
+    @ColumnInfo(name = "img")
+    private byte[] img;
+    @ColumnInfo(name = "name")
     private String name;
-    private String wrongName1;
-    private String wrongName2;
-    public Entry() {
 
+    public Entry() {
         this.name = "No name specified";
     }
 
@@ -29,7 +35,7 @@ public class Entry {
      * @param name
      * @param img
      */
-    public Entry(String name, Bitmap img) {
+    public Entry(String name, byte[] img) {
         this.img = img;
         this.name = name;
     }
@@ -50,11 +56,11 @@ public class Entry {
         this.id = id;
     }
 
-    public Bitmap getImg() {
+    public byte[] getImg() {
         return img;
     }
 
-    public void setImg(Bitmap img) {
+    public void setImg(byte[] img) {
         this.img = img;
     }
 
@@ -68,9 +74,10 @@ public class Entry {
 
     @Override
     public String toString() {
+        ConverterHelper dbHelper = new ConverterHelper();
         return "Entry{" +
                 "id=" + id +
-                ", img='" + img + '\'' +
+                ", img='" + dbHelper.ByteArrayToBitmap(img) + '\'' +
                 ", name='" + name + '\'' +
                 '}';
     }

@@ -1,24 +1,20 @@
-/**
- *
- * Activity for showing entries in a list
- */
-
 package com.example.oblig1;
 
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
 
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.Observer;
 import androidx.navigation.ui.AppBarConfiguration;
 
 import com.example.oblig1.databinding.ActivityDatabaseBinding;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
+import java.util.List;
 
 
 /**
@@ -28,22 +24,31 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 public class DatabaseActivity extends MainActivity implements View.OnClickListener {
 
     private ActivityDatabaseBinding binding;
-    private AppBarConfiguration appBarConfiguration;
 
-    private EntriesSingleton db = EntriesSingleton.getInstance();
     private ViewBaseAdapter viewBaseAdapter;
+
+    private QuizViewModel quizViewModel;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        db.getEntries().sortAZ();
+
+        quizViewModel = new QuizViewModel(getApplication());
         binding = ActivityDatabaseBinding.inflate(getLayoutInflater());
         setContentView(R.layout.activity_database);
         ListView listView;
         listView = (ListView) findViewById(R.id.listview_content);
 
+        LiveData<List<Entry>> allEntries = quizViewModel.getAllEntries();
+        viewBaseAdapter = new ViewBaseAdapter(this.getApplication(), getBaseContext(), quizViewModel);
+        allEntries.observe(this, new Observer<List<Entry>>() {
+            @Override
+            public void onChanged(List<Entry> entries) {
+                listView.setAdapter(viewBaseAdapter);
+                viewBaseAdapter.notifyDataSetChanged();
+            }
+        });
 
-        viewBaseAdapter = new ViewBaseAdapter(this, db);
-        listView.setAdapter(viewBaseAdapter);
 
         FloatingActionButton fab = findViewById(R.id.databaseFab);
         fab.setOnClickListener(this);
@@ -58,7 +63,7 @@ public class DatabaseActivity extends MainActivity implements View.OnClickListen
    protected void onStart() {
        super.onStart();
        Button sortButton = findViewById(R.id.sortButton);
-       sortButton.setText(db.getEntries().getSortedAZ() ? "Sorted A-Z" : "Sorted Z-A");
+       sortButton.setText(quizViewModel.getSortedAZ() ? "Sorted A-Z" : "Sorted Z-A");
        viewBaseAdapter.notifyDataSetChanged();
    }
 
@@ -72,15 +77,15 @@ public class DatabaseActivity extends MainActivity implements View.OnClickListen
             case R.id.sortButton:
                 Log.d("BUTTON PRESSED", "Sort: AZ og ZA");
                 Button btn = findViewById(R.id.sortButton);
-                EntriesArrayList entries = db.getEntries();
 
-                if (entries.getSortedAZ()) {
-                    entries.sortZA();
+
+                if (quizViewModel.getSortedAZ()) {
+                    quizViewModel.sortZA();
                 } else {
-                    entries.sortAZ();
+                    quizViewModel.sortAZ();
                 }
 
-                btn.setText(entries.getSortedAZ() ? "Sorted A-Z" : "Sorted Z-A");
+                btn.setText(quizViewModel.getSortedAZ() ? "Sorted A-Z" : "Sorted Z-A");
                 viewBaseAdapter.notifyDataSetChanged();
                 break;
         }

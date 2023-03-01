@@ -5,6 +5,7 @@
 
 package com.example.oblig1;
 
+import android.app.Application;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.util.Log;
@@ -13,13 +14,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
-
-import androidx.fragment.app.FragmentManager;
-
-import java.util.List;
 
 /**
  *
@@ -29,25 +25,29 @@ import java.util.List;
 
 public class ViewBaseAdapter extends BaseAdapter implements View.OnClickListener {
 
+    private Application application;
     private final Context ctx;
-    private EntriesSingleton entries;
+    private QuizViewModel viewModel;
     private LayoutInflater inflater;
+
+    private ConverterHelper converter = new ConverterHelper();
 
     /**
      * Creates a new ViewBaseAdapter
-     * @param ctx
-     * @param db
+     * @param application
+     * @param viewModel
      */
-    public ViewBaseAdapter(Context ctx, EntriesSingleton db) {
-        this.ctx = ctx;
-        this.entries = db;
+    public ViewBaseAdapter(Application application, Context ctx, QuizViewModel viewModel) {
+        this.application = application;
+        this. ctx = ctx;
+        this.viewModel = viewModel;
         inflater = LayoutInflater.from(ctx);
     }
 
 
     @Override
     public int getCount() {
-        return entries.getEntries().size();
+        return viewModel.getRepoSize();
     }
 
     @Override
@@ -68,11 +68,11 @@ public class ViewBaseAdapter extends BaseAdapter implements View.OnClickListener
         Button btn = (Button) convertView.findViewById(R.id.btnRemove);
         btn.setOnClickListener(this);
         //Sets a tag on the button to be used in the onClickListener to remove the correct entry.
-        btn.setTag((int)position);
+        btn.setTag((int)viewModel.getAllEntries().getValue().get(position).getId());
 
         //Updates correct text and image for the entry.
-        textView.setText(entries.getEntries().getEntry(position).getName());
-        Bitmap bitmap = entries.getEntries().getEntry(position).getImg();
+        textView.setText(viewModel.getAllEntries().getValue().get(position).getName());
+        Bitmap bitmap = converter.ByteArrayToBitmap(viewModel.getAllEntries().getValue().get(position).getImg());
         img.setImageBitmap(bitmap);
 
         return convertView;
@@ -80,15 +80,9 @@ public class ViewBaseAdapter extends BaseAdapter implements View.OnClickListener
 
     @Override
     public void onClick(View v) {
-        EntriesSingleton db = EntriesSingleton.getInstance();
         int id = (int) v.getTag();
 
         //Removes correct entry if remove-button is pressed.
-        if(db.doesEntryExist(id)) {
-            db.removeEntry(id);
-            this.entries = db;
-            Log.d("ID CLICKED", "onClick: " + id);
-            this.notifyDataSetChanged();
-        }
+        viewModel.delete(id);
     }
 }

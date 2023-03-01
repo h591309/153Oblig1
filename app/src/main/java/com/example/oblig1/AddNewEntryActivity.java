@@ -13,7 +13,6 @@ import android.widget.EditText;
 import android.widget.ImageView;
 
 import com.example.oblig1.databinding.ActivityAddNewEntryBinding;
-import com.example.oblig1.databinding.ActivityMainBinding;
 
 
 /**
@@ -23,9 +22,11 @@ import com.example.oblig1.databinding.ActivityMainBinding;
 public class AddNewEntryActivity extends AppCompatActivity implements View.OnClickListener {
 
 
-    private EntriesSingleton db = EntriesSingleton.getInstance();
+    private EntriesRepository db = new EntriesRepository(this.getApplication());
     private ActivityAddNewEntryBinding binding;
     private static final int PICK_IMAGE = 1000;
+
+    private ConverterHelper converter = new ConverterHelper();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,8 +50,9 @@ public class AddNewEntryActivity extends AppCompatActivity implements View.OnCli
         String txt = editText.getText().toString();
         ImageView imageView = (ImageView) findViewById(R.id.galleryButton);
 
-        Bitmap bitmap= ((BitmapDrawable) imageView.getDrawable()).getBitmap();
-        Entry e = new Entry(txt, bitmap);
+        BitmapDrawable drawable = (BitmapDrawable) imageView.getDrawable();
+        Bitmap bitmap = drawable.getBitmap();
+        Entry e = new Entry(txt, converter.BitmapToByteArray(bitmap));
         return e;
     }
 
@@ -94,7 +96,7 @@ public class AddNewEntryActivity extends AppCompatActivity implements View.OnCli
     public void addNewEntryToDatabase() {
         Entry entry = createEntryFromInput();
         Log.d("SUBMITTED", "onClick: " + entry.toString());
-        db.getEntries().addEntry(entry);
+        db.insert(entry);
     }
 
     @Override

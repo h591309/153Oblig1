@@ -1,11 +1,12 @@
 package com.example.oblig1;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.Observer;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.view.animation.AlphaAnimation;
@@ -15,11 +16,7 @@ import android.widget.TextView;
 
 import com.example.oblig1.databinding.ActivityQuizBinding;
 
-import org.w3c.dom.Text;
-
-import java.util.Timer;
-import java.util.TimerTask;
-import java.util.concurrent.TimeUnit;
+import java.util.List;
 
 
 /**
@@ -38,7 +35,10 @@ public class QuizActivity extends AppCompatActivity implements View.OnClickListe
     private TextView textViewTimer;
 
     private MyTimer timer;
-    private EntriesSingleton db = EntriesSingleton.getInstance();
+    private QuizViewModel quizViewModel;
+    private LiveData<List<Entry>> allEntries;
+
+    private ConverterHelper converter = new ConverterHelper();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,8 +50,7 @@ public class QuizActivity extends AppCompatActivity implements View.OnClickListe
 
         textViewTimer = findViewById(R.id.textViewTimer);
         timer = new MyTimer(this, timerStartsFrom, textViewTimer);
-
-
+        quizViewModel = new QuizViewModel(getApplication());
         wrongOrRightText();
         Log.d("CORRECT BUTTON", "onCreate: " + correctButton);
     }
@@ -59,8 +58,14 @@ public class QuizActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onStart() {
         super.onStart();
+        allEntries = quizViewModel.getAllEntries();
+        allEntries.observe(this, new Observer<List<Entry>>() {
+            @Override
+            public void onChanged(List<Entry> entries) {
+                quizQuest();
+            }
+        });
         timer.setTimeLeft(timerStartsFrom);
-        quizQuest();
         Log.d("HARMODE", "onStart: " + (hardMode ? "on" : "off"));
     }
 
@@ -106,12 +111,6 @@ public class QuizActivity extends AppCompatActivity implements View.OnClickListe
 
         boolean done = false;
 
-
-        //Creates entries if there isnt enough entries in the database for a quiz question.
-        if(db.getEntries().size() < 3) {
-            createBackupEntries();
-        }
-
         //Makes sure the two given wrong answers are not equal to each other or the correct answer.
         while(!done) {
             if(wrongName1 == question.getName()) {
@@ -153,7 +152,7 @@ public class QuizActivity extends AppCompatActivity implements View.OnClickListe
 
         //Sets the correct image for quiz-question
         ImageView img = findViewById(R.id.imageViewQuiz);
-        img.setImageBitmap(question.getImg());
+        img.setImageBitmap(converter.ByteArrayToBitmap(question.getImg()));
 
         btn1.setOnClickListener(this);
         btn2.setOnClickListener(this);
@@ -169,9 +168,8 @@ public class QuizActivity extends AppCompatActivity implements View.OnClickListe
      * @return Entry
      */
     private Entry pickRandomQuizQuestion() {
-        int randomNumber = (int) Math.round(Math.random() * (db.getEntries().size()-1));
-        EntriesSingleton db = EntriesSingleton.getInstance();
-        return db.getEntries().getEntry(randomNumber);
+        int randomNumber = (int) Math.round(Math.random() * (allEntries.getValue().size()-1));
+        return allEntries.getValue().get(randomNumber);
     }
 
     @Override
@@ -257,14 +255,17 @@ public class QuizActivity extends AppCompatActivity implements View.OnClickListe
      * Creates 3 Entries for the database.
      * 3 is minimum amount of entries for this quiz.
      */
+    /*
     private void createBackupEntries() {
-        Entry e = new Entry("Kitten with blue eyes", createBitmapFromDrawable(R.drawable.cat1));
-        db.addExampleData(e);
-        e = new Entry("Black cat with yellow eyes", createBitmapFromDrawable(R.drawable.cat2));
-        db.addExampleData(e);
-        e = new Entry("Not a cat", createBitmapFromDrawable(R.drawable.cat3));
-        db.addExampleData(e);
+        Entry e = new Entry("Kitten with blue eyes", converter.BitmapToByteArray(createBitmapFromDrawable(R.drawable.cat1)));
+        quizViewModel.addExampleData(e);
+        e = new Entry("Black cat with yellow eyes", converter.BitmapToByteArray(createBitmapFromDrawable(R.drawable.cat2)));
+        quizViewModel.addExampleData(e);
+        e = new Entry("Not a cat", converter.BitmapToByteArray(createBitmapFromDrawable(R.drawable.cat3)));
+        quizViewModel.addExampleData(e);
     }
+
+     */
 
     /**
      * Animation for textview showing wrong/right answer.
