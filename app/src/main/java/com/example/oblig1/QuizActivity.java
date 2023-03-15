@@ -4,6 +4,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Observer;
 
+import android.app.Application;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -30,13 +32,14 @@ public class QuizActivity extends AppCompatActivity implements View.OnClickListe
     private int correctButton;
     private int numberOfQuestions;
     private boolean hardMode = false;
-    private static final int timerStartsFrom = 5;
+    private static final int timerStartsFrom = 30;
     private int numberOfCorrectAnswers = 0;
     private TextView textViewTimer;
 
     private MyTimer timer;
-    private QuizViewModel quizViewModel;
+    private EntriesAccessObject entriesAccessObject;
     private LiveData<List<Entry>> allEntries;
+    private QuizViewModel qvm;
 
     private ConverterHelper converter = new ConverterHelper();
 
@@ -47,10 +50,9 @@ public class QuizActivity extends AppCompatActivity implements View.OnClickListe
         binding = ActivityQuizBinding.inflate(getLayoutInflater());
         numberOfQuestions = 0;
         hardMode = (boolean) getIntent().getBooleanExtra("hard_mode", false);
-
         textViewTimer = findViewById(R.id.textViewTimer);
         timer = new MyTimer(this, timerStartsFrom, textViewTimer);
-        quizViewModel = new QuizViewModel(getApplication());
+        entriesAccessObject = new EntriesAccessObject(getApplication());
         wrongOrRightText();
         Log.d("CORRECT BUTTON", "onCreate: " + correctButton);
     }
@@ -58,7 +60,7 @@ public class QuizActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onStart() {
         super.onStart();
-        allEntries = quizViewModel.getAllEntries();
+        allEntries = entriesAccessObject.getAllEntries();
         allEntries.observe(this, new Observer<List<Entry>>() {
             @Override
             public void onChanged(List<Entry> entries) {
@@ -67,6 +69,9 @@ public class QuizActivity extends AppCompatActivity implements View.OnClickListe
         });
         timer.setTimeLeft(timerStartsFrom);
         Log.d("HARMODE", "onStart: " + (hardMode ? "on" : "off"));
+
+        Button backButton = findViewById(R.id.backButton);
+        backButton.setOnClickListener(this);
     }
 
     private void startTimer() {
@@ -87,16 +92,16 @@ public class QuizActivity extends AppCompatActivity implements View.OnClickListe
         numberOfQuestions++;
 
         //Check to see if hardmode is enabled.
-        if(hardMode) {
+        if (hardMode) {
             //Starts timer-thread as long as its not running already.
-            if(!timer.isRunning()) {
+            if (!timer.isRunning()) {
                 timer.start();
             }
             TextView modeTxt = (TextView) findViewById(R.id.textViewMode);
             modeTxt.setText("Hard mode");
         } else {
             //Sets timer text to be invisible.
-            textViewTimer  = findViewById(R.id.textViewTimer);
+            textViewTimer = findViewById(R.id.textViewTimer);
             textViewTimer.setAlpha(0);
         }
 
@@ -112,12 +117,12 @@ public class QuizActivity extends AppCompatActivity implements View.OnClickListe
         boolean done = false;
 
         //Makes sure the two given wrong answers are not equal to each other or the correct answer.
-        while(!done) {
-            if(wrongName1 == question.getName()) {
+        while (!done) {
+            if (wrongName1 == question.getName()) {
                 wrongName1 = pickRandomQuizQuestion().getName();
-            } else if(wrongName2 == question.getName()) {
+            } else if (wrongName2 == question.getName()) {
                 wrongName2 = pickRandomQuizQuestion().getName();
-            } else if(wrongName1 == wrongName2) {
+            } else if (wrongName1 == wrongName2) {
                 wrongName1 = pickRandomQuizQuestion().getName();
             } else {
                 done = true;
@@ -149,7 +154,6 @@ public class QuizActivity extends AppCompatActivity implements View.OnClickListe
                 btn1.setText(wrongName2);
                 break;
         }
-
         //Sets the correct image for quiz-question
         ImageView img = findViewById(R.id.imageViewQuiz);
         img.setImageBitmap(converter.ByteArrayToBitmap(question.getImg()));
@@ -167,6 +171,7 @@ public class QuizActivity extends AppCompatActivity implements View.OnClickListe
      * Picks a random quiz-question.
      * @return Entry
      */
+
     private Entry pickRandomQuizQuestion() {
         int randomNumber = (int) Math.round(Math.random() * (allEntries.getValue().size()-1));
         return allEntries.getValue().get(randomNumber);
@@ -178,9 +183,17 @@ public class QuizActivity extends AppCompatActivity implements View.OnClickListe
         int pointsToAdd = 0;
         boolean timeOut = false;
         TextView textViewPointsAdded = findViewById(R.id.textViewPointsAdded);
+        Boolean done = false;
 
         //Checks for what button is pressed.
         switch(v.getId()){
+            case R.id.backButton:
+                done = true;
+                Intent quizIntent = new Intent(this, MainActivity.class);
+                //quizIntent.putExtra("hard_mode", hardMode);
+                startActivity(quizIntent);
+                finish();
+                break;
             case R.id.quizBtn1:
                 if(correctButton == 1)
                     correctAnswer = true;
@@ -194,7 +207,8 @@ public class QuizActivity extends AppCompatActivity implements View.OnClickListe
                     correctAnswer = true;
                 break;
         }
-
+        if(done)
+            return;
         //Check to see if there is time left on hardmode
         if(timer.getTimeLeft() < 0) {
             correctAnswer = false;

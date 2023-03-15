@@ -22,7 +22,7 @@ import com.example.oblig1.databinding.ActivityAddNewEntryBinding;
 public class AddNewEntryActivity extends AppCompatActivity implements View.OnClickListener {
 
 
-    private EntriesRepository db = new EntriesRepository(this.getApplication());
+    private EntriesAccessObject db = new EntriesAccessObject(this.getApplication());
     private ActivityAddNewEntryBinding binding;
     private static final int PICK_IMAGE = 1000;
 
@@ -109,6 +109,7 @@ public class AddNewEntryActivity extends AppCompatActivity implements View.OnCli
                 addNewEntryToDatabase();
                 Intent intent = new Intent(getBaseContext(), MainActivity.class);
                 startActivity(intent);
+                finish();
                 break;
 
         }

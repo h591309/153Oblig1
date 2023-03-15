@@ -1,78 +1,72 @@
 package com.example.oblig1;
 
-import android.app.Application;
-import android.util.Log;
-
-import androidx.lifecycle.AndroidViewModel;
-import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModel;
 
-import java.util.Comparator;
 import java.util.List;
 
-public class QuizViewModel extends AndroidViewModel {
-    private EntriesRepository repo;
+public class QuizViewModel extends ViewModel {
+    private EntriesAccessObject db;
 
-    private final LiveData<List<Entry>> allEntries;
+    private int score;
+    private Entry correct;
+    private String wrong1;
 
-    public QuizViewModel (Application application) {
-        super(application);
-        repo = new EntriesRepository(application);
-        allEntries = repo.getAllEntries();
+    public QuizViewModel(Entry correct, String wrong1, String wrong2) {
+        super();
+        this.correct = correct;
+        this.wrong1 = wrong1;
+        this.wrong2 = wrong2;
+    }
 
+    public EntriesAccessObject getDb() {
+        return db;
+    }
+
+    public void setDb(EntriesAccessObject db) {
+        this.db = db;
+    }
+
+    public Entry getCorrect() {
+        return correct;
+    }
+
+    public void setCorrect(Entry correct) {
+        this.correct = correct;
+    }
+
+    public String getWrong1() {
+        return wrong1;
+    }
+
+    public void setWrong1(String wrong1) {
+        this.wrong1 = wrong1;
+    }
+
+    public String getWrong2() {
+        return wrong2;
+    }
+
+    public void setWrong2(String wrong2) {
+        this.wrong2 = wrong2;
     }
 
     public LiveData<List<Entry>> getAllEntries() {
         return allEntries;
     }
 
-    public void insert(Entry entry) { repo.insert(entry); }
-
-    public void delete(int id) {
-        repo.delete(id);
+    public void setAllEntries(LiveData<List<Entry>> allEntries) {
+        this.allEntries = allEntries;
     }
 
-    public int getRepoSize() {
-        return allEntries.getValue().size();
+    private String wrong2;
+    private LiveData<List<Entry>> allEntries;
+
+    public int getScore() {
+        return score;
     }
 
-    public boolean getSortedAZ() {
-        return repo.getSortedAZ();
-    }
-
-    public void sortAZ() {
-        Log.d("SORTING AZ", "sortAZ: ");
-        if(allEntries.getValue().isEmpty()) {
-            return;
-        }
-        repo.setSortedAZ(true);
-        allEntries.getValue().sort(new Comparator<Entry>() {
-            @Override
-            public int compare(Entry o1, Entry o2) {
-                return o1.getName().toLowerCase().compareTo(o2.getName().toLowerCase());
-            }
-        });
-    }
-
-    public void sortZA() {
-        Log.d("SORTING ZA", "sortZA: ");
-        if(allEntries.getValue().isEmpty()) {
-            return;
-        }
-        repo.setSortedAZ(false);
-        allEntries.getValue().sort(new Comparator<Entry>() {
-            @Override
-            public int compare(Entry o1, Entry o2) {
-                return o2.getName().toLowerCase().compareTo(o1.getName().toLowerCase());
-            }
-        });
-    }
-    public boolean findEntryById(int id) {
-        if(allEntries.getValue().isEmpty()) {
-            return false;
-        }
-        //TODO fix
-        return false;
+    public void setScore(int score) {
+        this.score = score;
     }
 }

@@ -8,7 +8,6 @@ package com.example.oblig1;
 import android.app.Application;
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,7 +26,7 @@ public class ViewBaseAdapter extends BaseAdapter implements View.OnClickListener
 
     private Application application;
     private final Context ctx;
-    private QuizViewModel viewModel;
+    private EntriesAccessObject viewModel;
     private LayoutInflater inflater;
 
     private ConverterHelper converter = new ConverterHelper();
@@ -37,7 +36,7 @@ public class ViewBaseAdapter extends BaseAdapter implements View.OnClickListener
      * @param application
      * @param viewModel
      */
-    public ViewBaseAdapter(Application application, Context ctx, QuizViewModel viewModel) {
+    public ViewBaseAdapter(Application application, Context ctx, EntriesAccessObject viewModel) {
         this.application = application;
         this. ctx = ctx;
         this.viewModel = viewModel;

@@ -23,7 +23,7 @@ public interface EntryDao {
     public void updateUsers(Entry... entries);
 
     @Insert
-    void insertAll(Entry... Entries);
+    void insertAll(Entry... entries);
 
     @Insert
     void insert(Entry e);

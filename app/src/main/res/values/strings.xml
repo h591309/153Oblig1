@@ -24,4 +24,5 @@
     <string name="add_new_entry_button_text">Submit</string>
     <string name="tooSlow">You were too slow</string>
     <string name="score">Number of correct answers:</string>
+    <string name="btn_back">Back</string>
 </resources>

@@ -1,16 +1,15 @@
 package com.example.oblig1;
 
-import android.app.Application;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import androidx.appcompat.widget.SwitchCompat;
 import androidx.navigation.ui.AppBarConfiguration;
 
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
@@ -25,21 +24,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private AppBarConfiguration appBarConfiguration;
     private ActivityMainBinding binding;
     private ConverterHelper converter = new ConverterHelper();
-    private QuizViewModel quizViewModel;
+    private EntriesAccessObject entriesAccessObject;
+
+    private boolean hardMode;
     SwitchCompat aSwitch;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        quizViewModel = new QuizViewModel(getApplication());
-
+        entriesAccessObject = new EntriesAccessObject(getApplication());
         setContentView(R.layout.activity_main);
-
-        aSwitch = (SwitchCompat) findViewById(R.id.hard_mode_switch);
         Button btnDB = findViewById(R.id.button_database);
         Button btnQuiz = findViewById(R.id.button_quiz);
-
         btnDB.setOnClickListener(this);
         btnQuiz.setOnClickListener(this);
     }
@@ -52,13 +48,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 startActivity(databaseIntent);
                 break;
             case R.id.button_quiz:
-
-                boolean hardMode = false;
+                aSwitch = findViewById(R.id.hard_mode_switch);
                 if(aSwitch != null) {
                     hardMode = aSwitch.isChecked();
                 }
-
-
                 Intent quizIntent = new Intent(this, QuizActivity.class);
                 quizIntent.putExtra("hard_mode", hardMode);
                 startActivity(quizIntent);

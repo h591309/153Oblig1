@@ -9,7 +9,6 @@ import android.widget.ListView;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Observer;
-import androidx.navigation.ui.AppBarConfiguration;
 
 import com.example.oblig1.databinding.ActivityDatabaseBinding;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -27,20 +26,20 @@ public class DatabaseActivity extends MainActivity implements View.OnClickListen
 
     private ViewBaseAdapter viewBaseAdapter;
 
-    private QuizViewModel quizViewModel;
+    private EntriesAccessObject entriesAccessObject;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        quizViewModel = new QuizViewModel(getApplication());
+        entriesAccessObject = new EntriesAccessObject(getApplication());
         binding = ActivityDatabaseBinding.inflate(getLayoutInflater());
         setContentView(R.layout.activity_database);
         ListView listView;
         listView = (ListView) findViewById(R.id.listview_content);
 
-        LiveData<List<Entry>> allEntries = quizViewModel.getAllEntries();
-        viewBaseAdapter = new ViewBaseAdapter(this.getApplication(), getBaseContext(), quizViewModel);
+        LiveData<List<Entry>> allEntries = entriesAccessObject.getAllEntries();
+        viewBaseAdapter = new ViewBaseAdapter(this.getApplication(), getBaseContext(), entriesAccessObject);
         allEntries.observe(this, new Observer<List<Entry>>() {
             @Override
             public void onChanged(List<Entry> entries) {
@@ -63,7 +62,7 @@ public class DatabaseActivity extends MainActivity implements View.OnClickListen
    protected void onStart() {
        super.onStart();
        Button sortButton = findViewById(R.id.sortButton);
-       sortButton.setText(quizViewModel.getSortedAZ() ? "Sorted A-Z" : "Sorted Z-A");
+       sortButton.setText(entriesAccessObject.getSortedAZ() ? "Sorted A-Z" : "Sorted Z-A");
        viewBaseAdapter.notifyDataSetChanged();
    }
 
@@ -73,19 +72,20 @@ public class DatabaseActivity extends MainActivity implements View.OnClickListen
             case R.id.databaseFab:
                 Intent intent = new Intent(binding.getRoot().getContext(), AddNewEntryActivity.class);
                 startActivity(intent);
+                finish();
                 break;
             case R.id.sortButton:
                 Log.d("BUTTON PRESSED", "Sort: AZ og ZA");
                 Button btn = findViewById(R.id.sortButton);
 
 
-                if (quizViewModel.getSortedAZ()) {
-                    quizViewModel.sortZA();
+                if (entriesAccessObject.getSortedAZ()) {
+                    entriesAccessObject.sortZA();
                 } else {
-                    quizViewModel.sortAZ();
+                    entriesAccessObject.sortAZ();
                 }
 
-                btn.setText(quizViewModel.getSortedAZ() ? "Sorted A-Z" : "Sorted Z-A");
+                btn.setText(entriesAccessObject.getSortedAZ() ? "Sorted A-Z" : "Sorted Z-A");
                 viewBaseAdapter.notifyDataSetChanged();
                 break;
         }
