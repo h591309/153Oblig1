@@ -41,6 +41,10 @@ public interface EntryDao {
     @Query("SELECT * FROM Entry ORDER BY name ASC")
     LiveData<List<Entry>> getNamesAZ();
 
+    @Query("SELECT * FROM Entry WHERE id = :entryId")
+    Entry findById(int entryId);
+
+
     @Query("SELECT * FROM Entry ORDER BY name DESC")
     LiveData<List<Entry>> getNamesZA();
 }

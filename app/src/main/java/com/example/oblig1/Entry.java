@@ -72,6 +72,13 @@ public class Entry {
         this.name = name;
     }
 
+    boolean equals(Entry entry) {
+        if(this.id == entry.getId()) {
+            return true;
+        }
+        return false;
+    }
+
     @Override
     public String toString() {
         ConverterHelper dbHelper = new ConverterHelper();

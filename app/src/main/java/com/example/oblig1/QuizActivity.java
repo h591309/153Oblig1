@@ -40,6 +40,7 @@ public class QuizActivity extends AppCompatActivity implements View.OnClickListe
     private EntriesAccessObject entriesAccessObject;
     private LiveData<List<Entry>> allEntries;
     private QuizViewModel qvm;
+    private Entry question;
 
     private ConverterHelper converter = new ConverterHelper();
 
@@ -108,7 +109,7 @@ public class QuizActivity extends AppCompatActivity implements View.OnClickListe
         //Picks one of the buttons to be the correct one.
         correctButton = (int) Math.round((Math.random() * 2) + 1);
 
-        Entry question = pickRandomQuizQuestion();
+        question = pickRandomQuizQuestion();
 
         //Picks to random wrong answers.
         String wrongName1 = pickRandomQuizQuestion().getName();
@@ -172,7 +173,7 @@ public class QuizActivity extends AppCompatActivity implements View.OnClickListe
      * @return Entry
      */
 
-    private Entry pickRandomQuizQuestion() {
+    protected Entry pickRandomQuizQuestion() {
         int randomNumber = (int) Math.round(Math.random() * (allEntries.getValue().size()-1));
         return allEntries.getValue().get(randomNumber);
     }
@@ -310,5 +311,9 @@ public class QuizActivity extends AppCompatActivity implements View.OnClickListe
         textView.startAnimation(fadeOut);
         fadeOut.setDuration(0);
         fadeOut.setFillAfter(true);
+    }
+
+    protected Entry getQuestion() {
+        return question;
     }
 }
