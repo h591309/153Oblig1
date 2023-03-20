@@ -1,5 +1,11 @@
 # Oblig 2: Quiz App revision
 
+Group 6:
+
+Sander Aasen Skønberg
+Ørjan Meling Skårnes
+Yosafe Fesaha Oqbamecail
+
 APK used during testing:
 
 app-debug-androidTest.apk
