@@ -107,7 +107,7 @@ public class AddNewEntryActivity extends AppCompatActivity implements View.OnCli
                 break;
             case R.id.submitButton:
                 addNewEntryToDatabase();
-                Intent intent = new Intent(getBaseContext(), MainActivity.class);
+                Intent intent = new Intent(getBaseContext(), DatabaseActivity.class);
                 startActivity(intent);
                 finish();
                 break;
