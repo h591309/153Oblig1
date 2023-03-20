@@ -9,6 +9,10 @@ import androidx.lifecycle.LiveData;
 import java.util.Comparator;
 import java.util.List;
 
+/**
+ *
+ * Class for accessing the Entries repository class.
+ */
 public class EntriesAccessObject extends AndroidViewModel {
     private EntriesRepository repo;
 

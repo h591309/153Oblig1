@@ -24,6 +24,12 @@ public abstract class QuestionDatabase extends RoomDatabase {
     static final ExecutorService databaseWriteExecutor =
             Executors.newFixedThreadPool(NUMBER_OF_THREADS);
 
+
+    /**
+     * Finds the room database instance. Creates a new one if non exists.
+     * @param context
+     * @return
+     */
     static QuestionDatabase getDatabase(final Context context) {
         if (INSTANCE == null) {
             synchronized (QuestionDatabase.class) {
@@ -33,11 +39,6 @@ public abstract class QuestionDatabase extends RoomDatabase {
                                     QuestionDatabase.class, "entry_database")
                             .addCallback(sRoomDatabaseCallback).build();
 
-                    /*
-                    *
-                    *
-                    *
-                    * */
                 }
                 //resetDb();
             }
@@ -55,6 +56,9 @@ public abstract class QuestionDatabase extends RoomDatabase {
         return bitmap;
     }
 
+    /**
+     * Temporary: Used to reset the initial database entries.
+     */
     private static void resetDb() {
         databaseWriteExecutor.execute(() -> {
             // Populate the database in the background.
@@ -83,6 +87,10 @@ public abstract class QuestionDatabase extends RoomDatabase {
         });
     }
 
+    /**
+     * Creates default initial values when creating the database for the first time.
+     *
+     */
     private static RoomDatabase.Callback sRoomDatabaseCallback = new RoomDatabase.Callback() {
         @Override
         public void onCreate(@NonNull SupportSQLiteDatabase db) {

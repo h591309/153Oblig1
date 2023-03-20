@@ -18,7 +18,7 @@ import android.widget.TextView;
 
 /**
  *
- * Base adapter to display databasec content as a list inside an activity.
+ * Base adapter to display database content as a list inside an activity.
  *
  */
 

@@ -45,22 +45,38 @@ public class EntriesRepository {
         //TODO Implement
     }
 
+    /**
+     * insert Entry in to database.
+     * @param entry
+     */
     void insert(Entry entry) {
         QuestionDatabase.databaseWriteExecutor.execute(() -> {
             entryDao.insert(entry);
         });
     }
 
+    /**
+     * Deletes Entry from database by id.
+     * @param id
+     */
     public void delete(int id) {
         QuestionDatabase.databaseWriteExecutor.execute(() -> {
             entryDao.deleteById(id);
         });
     }
 
+    /**
+     * Checks if the list is sorted A-Z or not
+     * @return true if data is sorted A-Z
+     */
     public boolean getSortedAZ() {
         return isSortedAZ;
     }
 
+    /**
+     * Setter for isSortedAZ variable.
+     * @param sortedAZ
+     */
     public void setSortedAZ(boolean sortedAZ) {
         isSortedAZ = sortedAZ;
     }
